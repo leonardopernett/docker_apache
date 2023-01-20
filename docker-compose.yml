@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+
+  apache:
+    restart: unless-stopped
+    networks:
+      - konecta_network
+    image: httpd:2.4.52
+    ports:
+      - 80:80
+      - 443:443
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1024m"
+        max-file: "3"
+    volumes:
+      - $PWD/src_docker/apache_data/httpd.conf:/usr/local/apache2/conf/httpd.conf
+      - $PWD/src_docker/apache_data/httpd-ssl.conf:/usr/local/apache2/conf/extra/httpd-ssl.conf
+      - $PWD/src_docker/apache_data/httpd-mpm.conf:/usr/local/apache2/conf/extra/httpd-mpm.conf
+      - $PWD/src_docker/apache_data/virtual_hosts:/usr/local/apache2/conf/extra/virtual_hosts
+      - $PWD/src_docker/apache_data/certificados:/usr/local/apache2/conf/extra/certificados
+
+networks:
+  konecta_network:
+    external: true
